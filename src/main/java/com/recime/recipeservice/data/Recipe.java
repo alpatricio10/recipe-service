@@ -29,4 +29,11 @@ public class Recipe {
 
     private int position;
 
+    public Recipe(String name, String imageUrl, DifficultyType difficulty, int position) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.difficulty = difficulty;
+        this.position = position;
+    }
+
 }
