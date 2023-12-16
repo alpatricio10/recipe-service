@@ -1,2 +1,2 @@
-# recipe-service
-Demo project for Recime 
+# Recipe Service
+This service facilitates recipe management for the Recime app. 
