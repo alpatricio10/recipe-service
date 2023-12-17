@@ -1,0 +1,115 @@
+{
+	"info": {
+		"_postman_id": "d9d538a7-7266-4f00-9c3b-6928e98b280a",
+		"name": "Recime Recipe Service",
+		"description": "A demo project for recipe management within the Recime app.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17918935"
+	},
+	"item": [
+		{
+			"name": "Get All Recipes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/recipe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"recipe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Recipes by Difficulty",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/recipeByDifficulty?difficulty=easy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"recipeByDifficulty"
+					],
+					"query": [
+						{
+							"key": "difficulty",
+							"value": "easy"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Error - Get All Recipes by Difficulty",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/recipeByDifficulty?difficulty",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"recipeByDifficulty"
+					],
+					"query": [
+						{
+							"key": "difficulty",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
