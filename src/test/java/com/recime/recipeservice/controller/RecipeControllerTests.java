@@ -1,8 +1,9 @@
 package com.recime.recipeservice.controller;
 
 import com.recime.recipeservice.data.DifficultyType;
+import com.recime.recipeservice.data.GetRecipeResponse;
 import com.recime.recipeservice.data.Recipe;
-import com.recime.recipeservice.repository.RecipeRepository;
+import com.recime.recipeservice.service.RecipeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -17,6 +18,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -28,7 +31,7 @@ public class RecipeControllerTests {
     private MockMvc mvc;
 
     @MockBean
-    private RecipeRepository recipeRepository;
+    private RecipeService recipeService;
 
     @Test
     public void testGetRecipes() throws Exception {
@@ -39,13 +42,20 @@ public class RecipeControllerTests {
                 new Recipe("Recipe3", "image3.jpg", DifficultyType.HARD, 3)
         );
 
-        Mockito.when(recipeRepository.findByOrderByPositionAsc()).thenReturn(recipes);
+        GetRecipeResponse response = new GetRecipeResponse();
+        response.setCurrentPage(1);
+        response.setTotalPages(1);
+        response.setData(recipes);
+
+        Mockito.when(recipeService.getRecipes(anyInt(), anyInt())).thenReturn(response);
 
         MockHttpServletRequestBuilder request = get("/api/v1/recipe");
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(jsonPath("$.currentPage").value(1))
+                .andExpect(jsonPath("$.totalPages").value(1))
                 .andExpect(jsonPath("$.data[0].name").value("Recipe1"))
                 .andExpect(jsonPath("$.data[1].name").value("Recipe2"))
                 .andExpect(jsonPath("$.data[2].name").value("Recipe3"));
@@ -59,13 +69,20 @@ public class RecipeControllerTests {
                 new Recipe("Recipe2", "image2.jpg", DifficultyType.EASY, 2)
         );
 
-        Mockito.when(recipeRepository.findByDifficultyOrderByPositionAsc(DifficultyType.EASY)).thenReturn(recipes);
+        GetRecipeResponse response = new GetRecipeResponse();
+        response.setCurrentPage(1);
+        response.setTotalPages(1);
+        response.setData(recipes);
+
+        Mockito.when(recipeService.getRecipesByDifficulty(eq("easy"), anyInt(), anyInt())).thenReturn(response);
 
         MockHttpServletRequestBuilder request = get("/api/v1/recipeByDifficulty?difficulty=easy");
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(jsonPath("$.currentPage").value(1))
+                .andExpect(jsonPath("$.totalPages").value(1))
                 .andExpect(jsonPath("$.data[0].name").value("Recipe1"))
                 .andExpect(jsonPath("$.data[1].name").value("Recipe2"));
     }
