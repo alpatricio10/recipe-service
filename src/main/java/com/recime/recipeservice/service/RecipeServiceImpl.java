@@ -25,15 +25,7 @@ public class RecipeServiceImpl implements RecipeService {
         Pageable pageable = PageRequest.of(page - 1, limit);
         Page<Recipe> recipePage = recipeRepository.findByOrderByPositionAsc(pageable);
 
-        List<Recipe> recipes = recipePage.getContent();
-        long totalPages = recipePage.getTotalPages();
-        int currentPage = recipePage.getNumber() + 1;
-
-        GetRecipeResponse response = new GetRecipeResponse();
-        response.setTotalPages(totalPages);
-        response.setCurrentPage(currentPage);
-        response.setData(recipes);
-
+        GetRecipeResponse response = setGetRecipeResponseFromPage(recipePage);
         return response;
     }
 
@@ -44,9 +36,14 @@ public class RecipeServiceImpl implements RecipeService {
         Pageable pageable = PageRequest.of(page - 1, limit);
         Page<Recipe> recipePage = recipeRepository.findByDifficultyOrderByPositionAsc(difficultyType, pageable);
 
-        List<Recipe> recipes = recipePage.getContent();
-        long totalPages = recipePage.getTotalPages();
-        int currentPage = recipePage.getNumber() + 1;
+        GetRecipeResponse response = setGetRecipeResponseFromPage(recipePage);
+        return response;
+    }
+
+    private GetRecipeResponse setGetRecipeResponseFromPage(Page<Recipe> page) {
+        List<Recipe> recipes = page.getContent();
+        long totalPages = page.getTotalPages();
+        int currentPage = page.getNumber() + 1;
 
         GetRecipeResponse response = new GetRecipeResponse();
         response.setTotalPages(totalPages);
