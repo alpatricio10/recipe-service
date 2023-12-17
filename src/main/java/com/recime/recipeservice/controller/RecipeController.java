@@ -39,6 +39,10 @@ public class RecipeController {
     @GetMapping("recipeByDifficulty")
     public ResponseEntity<GetRecipeResponse> getRecipesByDifficulty(@RequestParam String difficulty) {
 
+        if (difficulty == null || difficulty.isEmpty()) {
+            throw new IllegalArgumentException("A difficulty is required for filtering trending recipes");
+        }
+
         List<Recipe> data = recipeRepository.findByDifficultyOrderByPositionAsc(DifficultyType.valueOf(difficulty.toUpperCase()));
 
         GetRecipeResponse response = new GetRecipeResponse();
