@@ -69,4 +69,16 @@ public class RecipeControllerTests {
                 .andExpect(jsonPath("$.data[0].name").value("Recipe1"))
                 .andExpect(jsonPath("$.data[1].name").value("Recipe2"));
     }
+
+    @Test
+    public void testGetRecipesByDifficulty_noDifficulty() throws Exception {
+
+        MockHttpServletRequestBuilder request = get("/api/v1/recipeByDifficulty?difficulty=");
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(jsonPath("$.code").value("ValidationError"))
+                .andExpect(jsonPath("$.message").value("A difficulty is required for filtering trending recipes"));
+    }
 }
